@@ -66,7 +66,7 @@ The security updates will let us know if it is worth our while working with an e
 
 We can use `getuid` and `sysinfo` to collect useful data from within a *meterpreter* session on the victim machine. These commands will return to us all the data we covered above *except* the installed updates and hot fixes.
 
-![sys1](images/1.png)
+![sys1](images/s1.png)
 
 ### Cmd Prompt
 
@@ -74,13 +74,13 @@ We can gather the necessary data without a meterpreter session by using commands
 
 We can use `hostname` to find the hostname.
 
-![sys2](images/2.png)
+![sys2](images/s2.png)
 
 An excellent command is `systeminfo` as it will give us all the necessary data *including* the *hotfixes* and more. We can copy the hotfix id numbers and search online to find out more about them so we know which vulnerability the hotfix was patching.
 
-![sys3](images/3.png)
+![sys3](images/s3.png)
 
-![sys4](images/4.png)
+![sys4](images/s4.png)
 
 To save time however we can use `wmic qfe get Caption,Description,HotFixID,InstalledOn` to get more data about the hotfixes so we dont have to research them online.
 
@@ -88,7 +88,7 @@ We can focus on the `Security Updates` in the returned data as these are the one
 
 There are also links to further info about the updates so we will not have to waste our lives using search engines to find the data we want.
 
-![sys5](images/5.png)
+![sys5](images/s5.png)
 
 >[!TIP]
 >It is worth looking for a file called `eula.txt` as it is found on *some* windows systems and contains useful data about the OS - if it is present on the compromised machine it will be found at `C:\Windows\System32\eula.txt`
