@@ -92,3 +92,52 @@ There are also links to further info about the updates so we will not have to wa
 
 >[!TIP]
 >It is worth looking for a file called `eula.txt` as it is found on *some* windows systems and contains useful data about the OS - if it is present on the compromised machine it will be found at `C:\Windows\System32\eula.txt`
+
+## Network Information
+
+It is important to enumerate data about networks when we compromise a machine as this will help us potentially *pivot* to other hosts and perhaps networks where we can possibly find more interesting data.
+
+We are mostly interested in finding out about internal networks the machine might be connected to which we are not able to see from an external point of view.
+
+An example of this would be a machine hosting a website which is accessible to the public internet but which is connected to an *internal* network using a different *network interface card* - this internal network is not visible to visitors of the website but can be discovered by an attacker who has compromised the server and is busy enumerating it.
+
+>[!IMPORTANT]
+>If new networks are discovered it is important that we enumerate them for new hosts - this will be covered in detail when we explore *pivoting* in a different set of notes - we need to know how to find them first which is what we are covering here
+
+We want to find out about:
+
+- Current IP address and network adapter
+- Internal networks if present
+- TCP and UDP services which are running along with their respective port numbers
+- Other hosts on the *same* network as the compromised machine
+- Routing and ARP table data
+- Windows firewall state
+
+We can use `ipconfig` and `ipconfig /all` to find out more about the network adapters which the compromised machine is using along with their respective network data such as IPV4 addresses and subnets.
+
+These commands will also show us the IP address of the *defaut gateway* which is responsible for routing traffic on the subnet.
+
+![nw1](images/n1.png)
+
+> [!TIP]
+> Even if we dont find any other networks it is still important to scan the network the compromised machine is on in order to look for hosts on it which are not visible from an external point of view
+
+![nw6](images/n6.png)
+
+We can use `route print` to look at the *routing table* which might show us some interesting or extra routes.
+
+![nw2](images/n2.png)
+
+The *arp table* is very useful and well worth looking at - it will show us the IP addresses of machines which the compromised machine has been communicating with using Address Resolution Protocol - this can help us target our further attacks against the network.
+
+The command `arp -a` will show us the *arp table* data.
+
+![nw3](images/n3.png)
+
+We can find out more about the tcp and udp services which are running along with their respective ports using `netstat -ano`
+
+![nw4](images/n4.png)
+
+When we want to find out about the state of the firewall we can use `netsh advfirewall show allprofiles` - the `help` command can let us know what we can do `netsh advfirewall firewall help`
+
+![nw5](images/n5.png)
