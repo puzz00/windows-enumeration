@@ -141,3 +141,61 @@ We can find out more about the tcp and udp services which are running along with
 When we want to find out about the state of the firewall we can use `netsh advfirewall show allprofiles` - the `help` command can let us know what we can do `netsh advfirewall firewall help`
 
 ![nw5](images/n5.png)
+
+## Processes and Services
+
+It is important to find out more about the processes, services and scheduled tasks on a compromised machine.
+
+- A process is an instance of a running executable | examples include open web browsers and documents which are being edited
+- A service is a process which runs in the background and does not interact with the desktop - aka a daemon as in the original daemons from Greek myth | examples are web servers and print spoolers
+- Scheduled tasks are routine tasks which have been automated to run to a set time schedule | examples include making backups of files or running anti-virus scans
+
+### Meterpreter
+
+We can use `ps` from inside a *meterpreter* session to list the running processes on a compromised machine.
+
+![p1](images/p1.png)
+
+We can filter by the *architecture* of the processes using `ps -A x64` for *64 bit* processes and `ps -A x86` for *32 bit* processes.
+
+![p2](images/p2.png)
+
+![p3](images/p3.png)
+
+If we want to find only processes which are running as *NT AUTHORITY/SYSTEM* - the most privileged interactive user account - using `ps -s`
+
+![p4](images/p4.png)
+
+>[!NOTE]
+>We will only see the *system* processes if we are already operating within the security context of a privileged user
+
+We can combine filter commands - for example if we only want to see *64 bit* processes which are running as *NT AUTHORITY/SYSTEM* we can use `ps -A x64 -s`
+
+We can search by the name of the process using `pgrep explorer.exe`
+
+![p5](images/p5.png)
+
+The *process id* along with its *name* | *architecture* and the *security privileges* it is running under are important to note.
+
+>[!TIP]
+>When it comes to *migrating* our *meterpreter* session to a different process we can use `migrate <PID>` - *explorer.exe* is a good stable process to use
+
+![p6](images/p6.png)
+
+### Command Shell
+
+We can use `net start` to see the running *services* and we can get more data about them using `wmic service list brief`
+
+![p7](images/p7.png)
+
+![p8](images/p8.png)
+
+If we want to find the running *processes* along with the *services* which are running under them using `tasklist /SVC`
+
+![p9](images/p9.png)
+
+To look at the *scheduled tasks* we can use `schtasks /query /fo LIST /v` This command returns lots of data so it makes sense to save its output into a *.txt* file.
+
+![p10](images/p10.png)
+
+![p11](images/p11.png)
