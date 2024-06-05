@@ -32,7 +32,15 @@ We can use `whoami /priv` to find out more about the privileges of the current u
 
 To find out more about other users on the compromised machine, we can use `query user` and `net user` and to find out more about a specific user we can use `net user messi`
 
+![u1](images/u1.png)
+
 The `query user` command will show us users who are logged on - this is important because we might need to be more careful with what we do if we see an admin user logged on as they might detect unusual activity more easily.
+
+![u2](images/u2.png)
+
+We can use `net users` to see the other user accounts on the compromised machine.
+
+![u0](images/u0.png)
 
 To enumerate other users present on a *domain* we can use `net user /domain`
 
@@ -42,9 +50,15 @@ Once we have found usernames for a local machine or a domain, we can iterate thr
 for %n in (fcastle,mwatson,SQLService) do net user %n /domain | findstr "pass"
 ```
 
+![u5](images/u5.png)
+
 To find out which local groups exist on the victim machine, we can use `net localgroup`
 
+![u3](images/u3.png)
+
 We can look for interesting groups as groups can give their members elevated privileges. We can look for members of interesting groups using `net localgroup administrators` We can then potentially target members of these interesting groups for priv esc purposes.
+
+![u4](images/u4.png)
 
 ## System Information
 
