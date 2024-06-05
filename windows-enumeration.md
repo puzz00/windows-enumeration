@@ -162,7 +162,7 @@ We can filter by the *architecture* of the processes using `ps -A x64` for *64 b
 
 ![p3](images/p3.png)
 
-If we want to find only processes which are running as *NT AUTHORITY/SYSTEM* - the most privileged interactive user account - using `ps -s`
+If we want to find only processes which are running as *NT AUTHORITY/SYSTEM* - the most privileged non-interactive user account - using `ps -s`
 
 ![p4](images/p4.png)
 
