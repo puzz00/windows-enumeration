@@ -224,23 +224,23 @@ We can run automated checks from within a meterpreter session if we have one.
 
 To find out more about the user we have gained access to the compromised machine as we can use `run post/windows/gather/win_privs`
 
-![auto1](images/a1)
+![auto1](images/a1.png)
 
 We can enumerate the logged-on users and the *recently* logged-on users with `run post/windows/gather/enum_logged_on_users`
 
-![auto2](images/a2)
+![auto2](images/a2.png)
 
 It is possible to see if the compromised machine is a *virtual machine* by using `run post/windows/gather/checkvm`
 
-![auto3](images/a3)
+![auto3](images/a3.png)
 
 To find out more about the installed applications we can use `run post/windows/gather/enum_applications` - this can be useful to run when we are looking for *priv esc* opportunities via vulnerable applications.
 
-![auto4](images/a4)
+![auto4](images/a4.png)
 
 We can enumerate the other computers which are in the same *domain* as the compromised machine using `run post/windows/gather/enum_computers`
 
-![auto5](images/a5)
+![auto5](images/a5.png)
 
 >[!NOTE]
 >If the compromised machine is not part of a *domain* we will not see any hosts get returned from the command `run post/windows/gather/enum_computers`
@@ -249,13 +249,13 @@ If we do find new hosts on the domain we can consider trying to *pivot* to them.
 
 We can enumerate installed *patches* and *hotfixes* by using `run post/windows/gather/enum_patches`
 
-![auto6](images/a6)
+![auto6](images/a6.png)
 
 To enumerate network shares which are available we can use `run post/windows/gather/enum_shares`
 
 The command to perform an *arp scan* on a specified *subnet* is `run post/windows/gather/arp_scanner RHOSTS=10.2.26.0/24`
 
-![auto7](images/a7)
+![auto7](images/a7.png)
 
 We can establish a new route to a different subnet - for example another subnet which the compromised machine is attached to via a different *nic* - by using `run autoroute -s 172.16.56.0/24`
 
@@ -263,7 +263,7 @@ We can use the same command to establish a route to the internal subnet which th
 
 The active *routing table* can be enumerated using `run autoroute -p`
 
-![auto8](images/a8)
+![auto8](images/a8.png)
 
 The active *routing table* will - hopefully - now show the newly added route which will use the meterpreter session on the compromised machine as a way to *pivot* to the newly discovered network.
 
@@ -280,7 +280,7 @@ We can download jaws to our attacking machine and then transfer it to the compro
 
 Once we have sucessfully transferred jaws onto the victim machine we can run it using `powershell.exe -ep bypass .\jaws.ps1 -OutputFilename jaws.txt`
 
-![auto9](images/a9)
+![auto9](images/a9.png)
 
 >[!NOTE]
 >We have saved the returned data to a `.txt` file because jaws returns lots of data and we will want to be able to analyse it more easily - the resulting `jaws.txt` file can be transferred to our attacking machine
@@ -293,7 +293,7 @@ Once we have transfered it to the victim machine we can run it using `powershell
 
 The above command will run the checks and save the returned data into a report called `priv_esc_check_1`
 
-![auto10](images/a10)
+![auto10](images/a10.png)
 
 >[!TIP]
 >We can use the `-Extended` flag to get more data from PrivescCheck
