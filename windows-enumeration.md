@@ -213,3 +213,103 @@ To look at the *scheduled tasks* we can use `schtasks /query /fo LIST /v` This c
 ![p10](images/p10.png)
 
 ![p11](images/p11.png)
+
+## Automating Windows Local Enumeration
+
+Whilst it is important to know how to *manually* enumerate a windows machine - it is a good idea to use *automated* enumeration scripts when we are working within a tight time schedule as they quickly check and return all of the areas we have covered in these notes - they can also perform simple *privilege escalation* enumeration.
+
+### Meterpreter
+
+We can run automated checks from within a meterpreter session if we have one.
+
+To find out more about the user we have gained access to the compromised machine as we can use `run post/windows/gather/win_privs`
+
+![auto1](images/a1)
+
+We can enumerate the logged-on users and the *recently* logged-on users with `run post/windows/gather/enum_logged_on_users`
+
+![auto2](images/a2)
+
+It is possible to see if the compromised machine is a *virtual machine* by using `run post/windows/gather/checkvm`
+
+![auto3](images/a3)
+
+To find out more about the installed applications we can use `run post/windows/gather/enum_applications` - this can be useful to run when we are looking for *priv esc* opportunities via vulnerable applications.
+
+![auto4](images/a4)
+
+We can enumerate the other computers which are in the same *domain* as the compromised machine using `run post/windows/gather/enum_computers`
+
+![auto5](images/a5)
+
+>[!NOTE]
+>If the compromised machine is not part of a *domain* we will not see any hosts get returned from the command `run post/windows/gather/enum_computers`
+
+If we do find new hosts on the domain we can consider trying to *pivot* to them.
+
+We can enumerate installed *patches* and *hotfixes* by using `run post/windows/gather/enum_patches`
+
+![auto6](images/a6)
+
+To enumerate network shares which are available we can use `run post/windows/gather/enum_shares`
+
+The command to perform an *arp scan* on a specified *subnet* is `run post/windows/gather/arp_scanner RHOSTS=10.2.26.0/24`
+
+![auto7](images/a7)
+
+We can establish a new route to a different subnet - for example another subnet which the compromised machine is attached to via a different *nic* - by using `run autoroute -s 172.16.56.0/24`
+
+We can use the same command to establish a route to the internal subnet which the first compromised machine is attached to - it does not have to be *dual homed* for us to find new target machines `run autoroute -s 10.2.16.0/20`
+
+The active *routing table* can be enumerated using `run autoroute -p`
+
+![auto8](images/a8)
+
+The active *routing table* will - hopefully - now show the newly added route which will use the meterpreter session on the compromised machine as a way to *pivot* to the newly discovered network.
+
+### Just Another Windows Enumeration Script
+
+A good powershell enumeration script to use is [J.A.W.S.](https://github.com/411Hall/JAWS)
+
+Since it is written in powershell we do not have to worry about trying to get an `.exe` binary to execute on the compromised machine.
+
+We can download jaws to our attacking machine and then transfer it to the compromised machine.
+
+>[!TIP]
+>When transfering data to a compromised windows machine it is a good idea to transfer it to `C:\Temp` - if this directory does not already exist we can create it by using `mkdir C:\Temp`
+
+Once we have sucessfully transferred jaws onto the victim machine we can run it using `powershell.exe -ep bypass .\jaws.ps1 -OutputFilename jaws.txt`
+
+![auto9](images/a9)
+
+>[!NOTE]
+>We have saved the returned data to a `.txt` file because jaws returns lots of data and we will want to be able to analyse it more easily - the resulting `jaws.txt` file can be transferred to our attacking machine
+
+### PrivescCheck
+
+Another good enumeration script which uses powershell is [PrivescCheck.ps1](https://github.com/itm4n/PrivescCheck)
+
+Once we have transfered it to the victim machine we can run it using `powershell.exe -ep bypass -c ". .\PrivescCheck.ps1; Invoke-PrivescCheck -Report priv_esc_check_1"`
+
+The above command will run the checks and save the returned data into a report called `priv_esc_check_1`
+
+![auto10](images/a10)
+
+>[!TIP]
+>We can use the `-Extended` flag to get more data from PrivescCheck
+
+## Conclusion
+
+We have looked at ways to enumerate a compromised windows machine when we first land on it.
+
+Manual methods have been covered as well as the use of an automated script or two.
+
+The main thing to keep in mind is that *all data is useful* and as such needs to be recorded in a systematic way so we can go back to it during our test and quickly find what we need.
+
+The data we collect during enumeration paves the way for privilege escalation opportunities | it can help when looking to obtain persistence and it can lead us to new hosts and networks to attack.
+
+All in all - we need to get to understand the nature of the system or systems we are working on as each is unique - the better we enumerate and understand what we find - the more successful our attacks will be :smiley: 
+
+---
+
+> water shapes its course according to the nature of the ground over which it flows | the soldier works out his victory in relation to the foe whom he is facing
